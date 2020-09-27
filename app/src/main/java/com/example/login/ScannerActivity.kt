@@ -22,7 +22,7 @@ class ScannerActivity : AppCompatActivity() {
             scannedResult = result.contents
             barcode_text.text = scannedResult
         } else {
-            barcode_text.text = "scan failed"
+            barcode_text.text = ""
         }
     } else {
         super.onActivityResult(requestCode, resultCode, data)
@@ -32,15 +32,12 @@ class ScannerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        surface_view.setOnClickListener(this)
+        btnTriggerScan.setOnClickListener {
+            run{
+                IntentIntegrator(this).initiateScan()
+            }
+        }
 
 
     }
-}
-
-
-private fun SurfaceView.setOnClickListener(scannerActivity: ScannerActivity) {
-    run{
-        IntentIntegrator(scannerActivity).initiateScan()
-   }
 }
