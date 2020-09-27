@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btnScanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="25dp"
+        android:text="Barcode Scanner" />
+
+    <Button
+        android:id="@+id/btnDatabase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="25dp"
+        android:text="Database Absensi" />
+
+    <Button
+        android:id="@+id/btnAbout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="25dp"
+        android:text="About Us" />
+
+    <Button
+        android:id="@+id/btnContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="25dp"
+        android:text="Contact Us" />
+</LinearLayout>
