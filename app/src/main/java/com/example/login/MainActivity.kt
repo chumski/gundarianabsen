@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.SurfaceView
+import com.example.login.ui.login.ListAbsensiActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,7 +22,12 @@ class MainActivity : AppCompatActivity() {
         btnScanner.setOnClickListener {showScanner() }
         btnAbout.setOnClickListener { showAbout() }
         btnContact.setOnClickListener { showContact() }
+        btnDatabase.setOnClickListener { showAbsensi() }
+    }
 
+    private fun showAbsensi() {
+        val intent = Intent(this,ListAbsensiActivity::class.java)
+        startActivity(intent);
     }
 
     private fun showContact() {

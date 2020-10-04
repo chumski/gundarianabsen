@@ -16,8 +16,13 @@ import com.example.login.data.model.Absensi;
 import com.example.login.data.model.Mahasiswa;
 
 import java.sql.Date;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
@@ -32,7 +37,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_ABSEN = "Absen";
 
     // column tables
-    private static final String KEY_ID_MAHASISWA = "id";
+    private static final String KEY_ID_MAHASISWA = "npm";
+
+    public DatabaseHandler(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
 
     public DatabaseHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -49,21 +58,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_MAHASISWA = "CREATE TABLE " + TABLE_MAHASISWA + "("
+        String CREATE_MAHASISWA = "CREATE TABLE IF NOT EXISTS " + TABLE_MAHASISWA + "("
                 + "npm INTEGER PRIMARY KEY,"
                 + "name TEXT,"
                 + "faculty TEXT,"
                 + "class_year TEXT)";
         db.execSQL(CREATE_MAHASISWA);
 
-        addMahasiswa(new Mahasiswa(123456789,"Andika Mufid","Ilmu Komputer","2016"));
-
-        String CREATE_ABSEN = "CREATE TABLE " + TABLE_ABSEN + "("
+        String CREATE_ABSEN = "CREATE TABLE IF NOT EXISTS " + TABLE_ABSEN + "("
                 + "npm INTEGER PRIMARY KEY,"
                 + "name TEXT,"
                 + "class_year TEXT,"
                 + "create_date TEXT)";
-        db.execSQL(CREATE_MAHASISWA);
+        db.execSQL(CREATE_ABSEN);
     }
 
     @Override
@@ -114,8 +121,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return mahasiswa;
     }
 
-    public List<Absensi> getAbsensi() {
-        List<Absensi> listAbsen = new ArrayList<Absensi>();
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public ArrayList<HashMap<String, String>> getAbsensi() {
+        ArrayList<HashMap<String,String>> listAbsen = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_ABSEN;
 
@@ -124,11 +132,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Absensi absensi = new Absensi();
-                absensi.setNpm(Integer.parseInt(cursor.getString(0)));
-                absensi.setName(cursor.getString(1));
-                absensi.setClass_year(cursor.getString(2));
-                absensi.setCreate_date(cursor.getString(3));
+                HashMap<String,String> absensi = new HashMap<>();
+                absensi.put("npm",cursor.getString(0));
+                absensi.put("name",cursor.getString(1));
+                absensi.put("class_year",cursor.getString(2));
+                absensi.put("create_date", cursor.getString(3).replace("T"," "));
 
                 listAbsen.add(absensi);
             } while (cursor.moveToNext());
