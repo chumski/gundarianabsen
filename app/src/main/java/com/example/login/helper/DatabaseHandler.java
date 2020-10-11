@@ -93,17 +93,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addMahasiswa(Mahasiswa mahasiswa){
+    public boolean addMahasiswa(Mahasiswa mahasiswa){
         SQLiteDatabase db  = getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put("npm", mahasiswa.getNpm());
         values.put("name", mahasiswa.getName());
         values.put("faculty", mahasiswa.getFaculty());
-        values.put("class_yeaer", mahasiswa.getClassYear());
+        values.put("class_year", mahasiswa.getClassYear());
 
-        db.insert(TABLE_ABSEN, null, values);
+        long result = db.insert(TABLE_MAHASISWA, null, values);
         db.close();
+
+        //kalo resultnya nilainya > 0 berarti insert db nya berhasil/ada rows affected
+        return result > 0;
+    }
+
+    public boolean deleteMahasiswa(String npm) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int res = db.delete(TABLE_MAHASISWA, KEY_ID_MAHASISWA + " = ?",
+                new String[] { npm });
+        db.close();
+
+        //kalo resultnya nilainya > 0 berarti delete db nya berhasil/ada rows affected
+        return res > 0;
     }
 
     public Mahasiswa getMahasiswa(int npm){
@@ -113,12 +126,39 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         "name", "faculty", "class_year" }, KEY_ID_MAHASISWA + "=?",
                 new String[] { String.valueOf(npm) }, null, null, null, null);
         if (cursor != null)
+        {
             cursor.moveToFirst();
+            Mahasiswa mahasiswa = new Mahasiswa(Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1), cursor.getString(2),cursor.getString(3));
+            return mahasiswa;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-        Mahasiswa mahasiswa = new Mahasiswa(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2),cursor.getString(3));
-        // return contact
-        return mahasiswa;
+    public Absensi getAbsenMahasiswa(int npm){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_ABSEN, new String[] { KEY_ID_MAHASISWA,
+                        "name", "class_year", "create_date" }, KEY_ID_MAHASISWA + "=?",
+                new String[] { String.valueOf(npm) }, null, null, null, null);
+        if (cursor != null)
+        {
+            cursor.moveToFirst();
+            int data = cursor.getCount();
+            if (data == 0)
+                return null;
+
+            Absensi absensi = new Absensi(Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1), cursor.getString(2),cursor.getString(3));
+            return absensi;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
